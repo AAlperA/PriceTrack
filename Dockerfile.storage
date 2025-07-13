@@ -9,6 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY utils ./utils
+COPY messaging ./messaging
 COPY storage.py ./storage.py
 
-ENTRYPOINT ["python", "-u", "storage.py"]
+ENTRYPOINT ["python", "storage.py"]
