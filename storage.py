@@ -23,9 +23,9 @@ def connection():
 
     return None, None
 
-def process_message(queue_name, data: dict, db, cursor):
+def process_message(market, topic, data: dict, db, cursor):
     try:
-        if queue_name == "migros_product":
+        if topic == "product":
             insert_products([(
                 data["product_name"],
                 data["brand"],
@@ -33,9 +33,9 @@ def process_message(queue_name, data: dict, db, cursor):
                 data["product_image"],
                 data["tags"]
             )], cursor)
-            logger.info(f"(✓)📦 Product inserted: {data['market']} - {data['product_name']}")
+            logger.info(f"(✓)📦 Product inserted: {market} - {data['product_name']}")
 
-        elif queue_name == "migros_price":
+        elif topic == "price":
             product_keys = [(data["product_name"], data["market"])]
             price_rows = [(
                 data["market"],
@@ -45,14 +45,14 @@ def process_message(queue_name, data: dict, db, cursor):
                 data["campaign"]
             )]
             insert_prices(product_keys, price_rows, cursor)
-            logger.info(f"(✓)💸 Price inserted: {data['market']} - {data['product_name']}")
+            logger.info(f"(✓)💸 Price inserted: {market} - {data['product_name']}")
 
         else:
-            logger.warning(f"(?) Unknown queue: {queue_name}, data: {data}")
+            logger.warning(f"(?) Unknown queue: {topic}, data: {data}")
 
         db.commit()  
     except Exception as e:
-        logger.error(f"(✗) Error inserting data from {queue_name}: {e}")
+        logger.error(f"(✗) Error inserting data from {topic}: {e}")
         db.rollback()  
 
 def insert_products(product_data, cursor):
@@ -120,8 +120,8 @@ if __name__ == "__main__":
     if db is None or cursor is None:
         logger.error("(✗) Consumers cannot be started without a database connection.")
     else:
-        def wrapper(queue_name, data):
-            return process_message(queue_name, data, db, cursor)
+        def wrapper(market, topic, data):
+            return process_message(market, topic, data, db, cursor)
         
         start_consumers(wrapper)
 

@@ -9,33 +9,30 @@ class RabbitPublisher:
         self.connection = rabbitmq_connection()
         if not self.connection:
             self.channel = None
-        else:
+        else:   
             self.channel = self.connection.channel()
 
-    def publish(self, queue_name, data):
+    def publish(self, market, topic , data):
         if not self.channel:
-            logger.warning(f"(✗) No channel to publish '{queue_name}'")
+            logger.warning(f"(✗) No channel to publish")
             return
-
+        
+        routing_key=f"{market}.{topic}"
+        
         try:
             payload = json.dumps(data, ensure_ascii=False)
             self.channel.basic_publish(
                 exchange="scrapers",
-                routing_key=queue_name,
+                routing_key=routing_key,
                 body=payload,
                 properties=pika.BasicProperties(
                     delivery_mode=2,
                     content_type="application/json"
                 )
             )
-
-            product_name = data.get('product_name', 'Unknown Product')
-            market = data.get('market', 'Unknown Market')
-            
-            logger.info(f"(✓) Message published to {queue_name} << ({market} - {product_name})")
-
-        except Exception as e:
-            logger.error(f"(✗) Publishing failed to '{queue_name}': {e}")
+            logger.info(f"(✓) Published to {routing_key}: {data.get('product_name', data)}")
+        except:
+            logger.error(f"(✗) Publish failed for {routing_key}")
 
     def close(self):
         if self.connection and not self.connection.is_closed:

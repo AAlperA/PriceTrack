@@ -10,7 +10,7 @@ services:
       RMQ_PORT: 5672
       RMQ_USER: root
       RMQ_PASSWORD: root
-      QUEUE_KEYS: "migros_product, migros_price"
+      MARKETS: migros
       DB_HOST: host.docker.internal
       DB_USER: root
       DB_PASSWORD: root

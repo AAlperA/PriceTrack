@@ -73,8 +73,8 @@ class MigrosScraper:
 
                 product_data = {"product_name":product_name, "brand":brand, "market":market, "product_image":product_image, "tags":tags}
                 price_data = {"market":market, "product_name":product_name, "special_price":special_price, "regular_price":regular_price, "campaign":campaign}
-                yield ("migros_product", product_data)
-                yield ("migros_price", price_data)
+                yield ("migros", "product", product_data)
+                yield ("migros", "price", price_data)
 
 
 if __name__ == "__main__":
@@ -82,6 +82,6 @@ if __name__ == "__main__":
     if scraper.publisher.channel is None:
         logger.error("(✗) Connection failed to RabbitMQ")
     else:
-        for topic, payload in scraper.scrape():
-            scraper.publisher.publish(topic, payload)
+        for market, topic, payload in scraper.scrape():
+            scraper.publisher.publish(market, topic, payload)
     scraper.publisher.close()
