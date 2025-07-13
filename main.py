@@ -16,15 +16,14 @@ if __name__ == '__main__':
     
     parser.add_argument('--scraper', default='migros')
 
-
     args = parser.parse_args()
 
     runner = SCRAPERS[args.scraper]()
 
     if runner.publisher.channel is None:
-        logger.error("(✗) Connection failed to RabbitMQ")
+        logger.error("(✗) RabbitMQ connection failed")
     else:
-        for topic, payload in runner.scrape():
-            runner.publisher.publish(topic, payload)
+        for market, topic, payload in runner.scrape():
+            runner.publisher.publish(market, topic, payload)
 
     runner.publisher.close()

@@ -1,0 +1,20 @@
+services:
+  migros-scraper:
+    build:
+      context: C:\path\to\pricetrack
+      dockerfile: Dockerfile.migros
+    container_name: migros_scraper
+    restart: always
+    environment:
+      RMQ_HOST: rabbitmq
+      RMQ_PORT: 5672
+      RMQ_USER: root
+      RMQ_PASSWORD: root
+      MIGROS_CATEGORIES_URL: https://www.migros.com.tr/rest/categories
+      MIGROS_API_URL: https://www.migros.com.tr/rest/search/screens/
+    networks:
+      - main_net
+
+networks:
+  main_net:
+    external: true
