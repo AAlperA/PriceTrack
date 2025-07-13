@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "name": "root",
+      "password": "root",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "root",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "scrapers",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "internal": false
+    }
+  ],
+  "queues": [
+    {
+      "name": "migros_product_queue",
+      "vhost": "/",
+      "durable": true
+    },
+    {
+      "name": "migros_price_queue",
+      "vhost": "/",
+      "durable": true
+    }
+  ],
+  "bindings": [
+    {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "migros_product_queue",
+      "destination_type": "queue",
+      "routing_key": "migros_product_queue"
+    },
+    {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "migros_price_queue",
+      "destination_type": "queue",
+      "routing_key": "migros_price_queue"
+    }
+  ]
+}
