@@ -30,8 +30,10 @@
     }
   ],
    "queues": [
-    { "name": "migros_product_queue",    "vhost": "/", "durable": true },
-    { "name": "migros_price_queue",      "vhost": "/", "durable": true }
+    { "name": "migros_product_queue", "vhost": "/", "durable": true },
+    { "name": "migros_price_queue", "vhost": "/", "durable": true },
+    { "name": "a101_product_queue", "vhost": "/", "durable": true },
+    { "name": "a101_price_queue", "vhost": "/", "durable": true }
   ],
    "bindings": [
     {
@@ -47,6 +49,20 @@
       "destination": "migros_price_queue",
       "destination_type": "queue",
       "routing_key": "migros.price"
+    },
+        {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "a101_product_queue",
+      "destination_type": "queue",
+      "routing_key": "a101.product"
+    },
+        {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "a101_price_queue",
+      "destination_type": "queue",
+      "routing_key": "a101.price"
     }
   ]
 }
