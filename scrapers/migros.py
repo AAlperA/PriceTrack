@@ -7,29 +7,42 @@ from messaging.publisher import RabbitPublisher
 
 load_dotenv()
 
-
 class MigrosScraper:   
     def __init__(self):
+        self.market = "migros"
+        self.total_page = 0
         self.publisher = RabbitPublisher()
-        self.categories_url = os.getenv('MIGROS_CATEGORIES_URL')
-        self.api_url = os.getenv('MIGROS_API_URL')
-            
+        self.categories_url = os.getenv("MIGROS_CATEGORIES_URL")
+        self.api_url = os.getenv("MIGROS_API_URL")
         self.headers = {
             "User-Agent": fakeua.set_uagent()
         }
 
-        self.response = requests.get(self.categories_url, headers=self.headers)
-        self.content = self.response.json()
-
     def category_links(self):
-        data = self.content['data']
+        """
+        Requesting to migros's home page to get all category urls
+
+        Returns List of category URLs
+        """
+        response = requests.get(self.categories_url, headers=self.headers)
+        content = response.json()
+        data = content['data']
         categories = []
+
         for item in data:
             pretty_name = item['data']['prettyName']
             categories.append(self.api_url + pretty_name)
         return categories
 
     def link_generator(self):
+        """
+        Adds categories to the API URL and increases the number of pages
+
+        If request is unsuccesful "while loop" breaking with "status_code != 200"
+        If page_count or hit_count is 0 than while loop is breaks
+
+        Yields JSON response data for a single page
+        """
         for link in self.category_links():
             page_num = 1
             while True:
@@ -49,19 +62,26 @@ class MigrosScraper:
                     break
 
                 logger.info(f"fetched: {page_url}")
+                self.total_page += 1
                 yield data
                 page_num += 1
 
     def scrape(self):
+        """
+        Scrapes each paginated categories and makes it ready for RabbitMQ
+
+        Yields 2 tuples as products and prices
+        """
         data = self.link_generator()
         for page_data in data:
-            market="migros"
+            product_data = []
+            price_data = []
             product_infos = page_data['searchInfo']['storeProductInfos']
             for info in product_infos:
                 brand = info['brand']['name']
                 product_name = info['name']
                 regular_price = float(info['shownPrice']/100)
-                special_price =  float(info['loyaltyPrice']/100)
+                special_price = float(info['loyaltyPrice']/100)
 
                 if regular_price == special_price:
                     special_price = None
@@ -70,28 +90,34 @@ class MigrosScraper:
                     campaign = info['crmDiscountTags'][0]['tag']
                 except IndexError:
                     campaign = None
+
                 product_image = info['images'][0]['urls']['PRODUCT_HD']
                 categories = info['categoriesForSorting']
                 tags = [category['name'] for category in categories]
 
-                product_data = {
+                products = {
                     "product_name": product_name,
                     "brand": brand,
-                    "market": market,
+                    "market": self.market,
                     "product_image": product_image,
                     "tags": tags
                 }
 
-                price_data = {
-                    "market":market, 
-                    "product_name":product_name, 
-                    "special_price":special_price, 
-                    "regular_price":regular_price, 
-                    "campaign":campaign
+                prices = {
+                    "product_name": product_name,
+                    "market": self.market,
+                    "special_price": special_price,
+                    "regular_price": regular_price,
+                    "campaign": campaign
                 }
 
-                yield (market, "product", product_data)
-                yield (market, "price", price_data)
+                product_data.append(products)
+                price_data.append(prices)
+
+            yield (self.market, "product", product_data)
+            yield (self.market, "price", price_data)
+
+        logger.info(f"A total of {self.total_page} pages were scraped")
 
 
 if __name__ == "__main__":
