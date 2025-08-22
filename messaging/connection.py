@@ -1,6 +1,9 @@
 import pika
 import os
 from utils.logger import logger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def rabbitmq_connection():
     try:

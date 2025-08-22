@@ -30,7 +30,7 @@ class RabbitPublisher:
                     content_type="application/json"
                 )
             )
-            logger.info(f"(✓) Published to {routing_key}: {data.get('product_name', data)}")
+            logger.info(f"(✓) {topic.title()} collection has been published to {routing_key} queue")
         except:
             logger.error(f"(✗) Publish failed for {routing_key}")
 
