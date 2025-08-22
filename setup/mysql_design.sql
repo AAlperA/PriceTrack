@@ -15,8 +15,6 @@ COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE prices (
     price_id INT AUTO_INCREMENT PRIMARY KEY,
-    market VARCHAR(40) NOT NULL,
-    product_name VARCHAR(255) NOT NULL,
     product_id INT NOT NULL,
     special_price DECIMAL(10,2),
     regular_price DECIMAL(10,2) NOT NULL,
