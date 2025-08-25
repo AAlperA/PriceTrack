@@ -1,0 +1,22 @@
+services:
+  api:
+    build:
+      context: "C:/Users/Karagümrük on fire/Desktop/projects/pricetrack"
+      dockerfile: Dockerfile.api
+    container_name: api
+    environment:
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: "root"
+      DB_DATABASE: pricetrack
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - "C:/Users/Karagümrük on fire/Desktop/projects/pricetrack/pricetrackapi:/app"
+    ports:
+      - "8000:8000"
+    networks:
+      - main_net
+
+networks:
+  main_net:
+    external: true
