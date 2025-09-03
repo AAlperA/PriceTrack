@@ -104,8 +104,12 @@ whole:
 ## Demo / Showcase
 Below are some gifs taken to illustrate the project in action:
 
-### Scraper log
-
 ### Storage log
+![Storage_log](https://github.com/user-attachments/assets/222b0489-3c03-46bc-a7f0-c1e9e77e7dc0)
 
 ### API Register-Login-Response
+![API_request](https://github.com/user-attachments/assets/25412db4-37af-4d16-8960-cc3480473518)
+
+### API Admin Usage
+![API_admin](https://github.com/user-attachments/assets/4927ff70-176f-4f4c-9151-53add6aaba5e)
+
