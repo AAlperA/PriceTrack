@@ -1,3 +1,6 @@
+USE pricetrack;
+ALTER DATABASE pricetrack CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS prices;
 DROP TABLE IF EXISTS products;
 
@@ -7,7 +10,7 @@ CREATE TABLE products (
     brand VARCHAR(255),
     market VARCHAR(40) NOT NULL,
     product_image VARCHAR(255),
-    tags JSON DEFAULT ('{}'),
+    tags JSON,
     UNIQUE (product_name, market)
 )
 DEFAULT CHARSET=utf8mb4

@@ -18,9 +18,12 @@ class Product(models.Model):
 
 class Price(models.Model):
     price_id = models.AutoField(primary_key=True)
-    market = models.CharField(max_length=40)
-    product_name = models.CharField(max_length=255)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, db_column='product_id')
+    product = models.ForeignKey(
+        'Product', 
+        on_delete=models.CASCADE, 
+        db_column='product_id',
+        related_name='prices'
+    )
     special_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     regular_price = models.DecimalField(max_digits=10, decimal_places=2)
     price_date = models.DateTimeField(auto_now_add=True)
@@ -28,6 +31,3 @@ class Price(models.Model):
 
     class Meta:
         db_table = 'prices'
-
-    def __str__(self):
-        return f"{self.product_name} - {self.regular_price} ({self.price_date.strftime('%Y-%m-%d')})"

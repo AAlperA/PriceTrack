@@ -17,7 +17,6 @@ class PriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Price
         fields = [
-            'product_id',
             'price_id',
             'special_price',
             'regular_price',
@@ -26,7 +25,7 @@ class PriceSerializer(serializers.ModelSerializer):
             ]
 
 class NestedSerializer(serializers.ModelSerializer):
-    prices = PriceSerializer(read_only=True) 
+    prices = PriceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product

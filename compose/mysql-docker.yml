@@ -6,12 +6,18 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pricetrack
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
     ports:
       - '3306:3306'
     volumes:
       - C:\Users\your_user\Desktop\volumes\pt-volume\pricetrack_mysql:/var/lib/mysql
       - C:\Users\your_user\Desktop\projects\PriceTrack\setup:/docker-entrypoint-initdb.d
       - C:\Users\your_user\Desktop\projects\PriceTrack\setup\my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
     networks:
       - main_net
       

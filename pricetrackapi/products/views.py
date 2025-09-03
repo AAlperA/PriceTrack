@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Product, Price
-from .serializers import ProductSerializer, PriceSerializer
+from .serializers import ProductSerializer, PriceSerializer, NestedSerializer
 from rest_framework.pagination import LimitOffsetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
@@ -48,21 +48,17 @@ class LoginAPIView(APIView):
     
 class WholeAPIView(generics.ListAPIView):
     permission_classes = [AdminOrReadOnly]
-    queryset = Price.objects.select_related('product').all() 
-    serializer_class = PriceSerializer
+    queryset = Product.objects.prefetch_related('prices').all()
+    serializer_class = NestedSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [
         'market',
         'brand', 
         'product_name', 
         'product_id',
-        'price_id',
-        'special_price',
-        'regular_price',
-        'price_date',
-        'product_image',
-        'campaign'
+        'product_image'
         ]
+
     
 class ProductAPIView(generics.ListAPIView):  
     permission_classes = [AdminOrReadOnly]

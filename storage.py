@@ -17,7 +17,10 @@ def connection():
             user= os.getenv("DB_USER"),
             password= os.getenv("DB_PASSWORD"),
             database= os.getenv("DB_DATABASE"),
-            autocommit=False
+            charset=os.getenv("MYSQL_CHARSET"),
+            collation=os.getenv("MYSQL_COLLATION"),
+            autocommit=False,
+            init_command='SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
         )
         logger.info("(✓) Connected to MySQL database")
         return db, db.cursor()
