@@ -1,0 +1,22 @@
+services:
+  storage:
+    build:
+      context: 'C:/Users/your_user/Desktop/projects/PriceTrack'
+      dockerfile: Dockerfile.storage
+    container_name: storage
+    environment:
+      RMQ_HOST: rabbitmq
+      RMQ_PORT: 5672
+      RMQ_USER: root
+      RMQ_PASSWORD: 'root'
+      MARKETS: migros, a101, getir
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: 'root'
+      DB_DATABASE: pricetrack
+    networks:
+      - main_net
+
+networks:
+  main_net:
+    external: true

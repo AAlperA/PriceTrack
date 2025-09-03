@@ -1,0 +1,18 @@
+services:
+  getir-scraper:
+    build:
+      context: 'C:\Users\your_user\Desktop\projects\PriceTrack'
+      dockerfile: Dockerfile.getir
+    container_name: getir_scraper
+    environment:
+      RMQ_HOST: rabbitmq
+      RMQ_PORT: 5672
+      RMQ_USER: root
+      RMQ_PASSWORD: 'root'
+      GETIR_URL: 'https://getir.com/buyuk/'
+    networks:
+      - main_net
+
+networks:
+  main_net:
+    external: true

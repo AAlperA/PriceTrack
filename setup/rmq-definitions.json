@@ -1,0 +1,84 @@
+{
+  "users": [
+    {
+      "name": "root",
+      "password": "root",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "root",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "scrapers",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "internal": false
+    }
+  ],
+   "queues": [
+    { "name": "migros_product_queue", "vhost": "/", "durable": true },
+    { "name": "migros_price_queue", "vhost": "/", "durable": true },
+    { "name": "a101_product_queue", "vhost": "/", "durable": true },
+    { "name": "a101_price_queue", "vhost": "/", "durable": true },
+    { "name": "getir_product_queue", "vhost": "/", "durable": true },
+    { "name": "getir_price_queue", "vhost": "/", "durable": true }
+  ],
+   "bindings": [
+    {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "migros_product_queue",
+      "destination_type": "queue",
+      "routing_key": "migros.product"
+    },
+    {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "migros_price_queue",
+      "destination_type": "queue",
+      "routing_key": "migros.price"
+    },
+        {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "a101_product_queue",
+      "destination_type": "queue",
+      "routing_key": "a101.product"
+    },
+        {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "a101_price_queue",
+      "destination_type": "queue",
+      "routing_key": "a101.price"
+    },
+        {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "getir_product_queue",
+      "destination_type": "queue",
+      "routing_key": "getir.product"
+    },
+        {
+      "source": "scrapers",
+      "vhost": "/",
+      "destination": "getir_price_queue",
+      "destination_type": "queue",
+      "routing_key": "getir.price"
+    }
+  ]
+}

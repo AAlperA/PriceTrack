@@ -1,0 +1,20 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pricetrack
+    ports:
+      - '3306:3306'
+    volumes:
+      - C:\Users\your_user\Desktop\volumes\pt-volume\pricetrack_mysql:/var/lib/mysql
+      - C:\Users\your_user\Desktop\projects\PriceTrack\setup:/docker-entrypoint-initdb.d
+      - C:\Users\your_user\Desktop\projects\PriceTrack\setup\my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    networks:
+      - main_net
+      
+networks:
+  main_net:
+    external: true

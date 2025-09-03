@@ -1,0 +1,18 @@
+services:
+  a101-scraper:
+    build:
+      context: 'C:\Users\your_user\Desktop\projects\PriceTrack'
+      dockerfile: Dockerfile.a101
+    container_name: a101_scraper
+    environment:
+      RMQ_HOST: rabbitmq
+      RMQ_PORT: 5672
+      RMQ_USER: root
+      RMQ_PASSWORD: 'root'
+      A101_API_URL: https://rio.a101.com.tr/dbmk89vnr/CALL/Store/getProductsByCategory/VS032?id=C01&channel=SLOT&__culture=tr-TR&__platform=web&data=e30%3D&__isbase64=true
+    networks:
+      - main_net
+
+networks:
+  main_net:
+    external: true

@@ -1,0 +1,19 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_LOAD_DEFINITIONS: '/etc/rabbitmq/definitions.json'
+    ports:
+      - '56730:5672'
+      - '15672:15672'
+    volumes:
+      - C:\Users\your_user\Desktop\volumes\pt-volume\pricetrack_rmq:/var/lib/rabbitmq 
+      - C:\Users\your_user\Desktop\projects\PriceTrack\setup\rmq-definitions.json:/etc/rabbitmq/definitions.json:ro
+      - C:\Users\your_user\Desktop\projects\PriceTrack\setup\rmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    networks:
+      - main_net
+      
+networks:
+  main_net:
+    external: true
