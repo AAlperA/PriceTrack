@@ -14,6 +14,10 @@ This project is all about scraping markets, saving data to mysql and provide acc
 
 - Data exchange between services using RabbitMQ message queues
 
+- Each scraper, storage, API, database, and message broker runs in its own container
+
+- Scrapers that pull product information using site's own API, Playwright & BeautifulSoup
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.<br><br>
