@@ -1,6 +1,6 @@
 # PriceTrack
 
-This project is all about scraping markets, saving data to mysql and provide access through a Django Rest Framework (DRF) based REST API. The project uses Docker for containerization and RabbitMQ for inter-service messaging.
+This project is all about scraping markets, saving data to MySQL and provide access through a Django Rest Framework (DRF) based REST API. The project uses Docker for containerization and RabbitMQ for inter-service messaging.
 
 ## Features
 
